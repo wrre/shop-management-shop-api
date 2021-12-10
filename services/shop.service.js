@@ -1,7 +1,7 @@
 import { ShopModel } from '../src/models';
 
 export class ShopService {
-  static async findShopPermissionsAccountIds(accountId) {
+  static async findAuthorizedAccountIds(accountId) {
     // TODO get from account api
     const accountIds = [accountId, 3];
 
@@ -10,7 +10,7 @@ export class ShopService {
 
   static async findShops(data) {
     const { accountId, limit, offset } = data;
-    const accountIds = await this.findShopPermissionsAccountIds(accountId);
+    const accountIds = await this.findAuthorizedAccountIds(accountId);
     const { rows: items, count } = await ShopModel.findAndCountAll({
       where: { accountId: accountIds },
       limit,
@@ -33,7 +33,7 @@ export class ShopService {
       id,
       shop: { name, address, phone, personInCharge },
     } = data;
-    const accountIds = await this.findShopPermissionsAccountIds(accountId);
+    const accountIds = await this.findAuthorizedAccountIds(accountId);
     await ShopModel.update(
       { name, address, phone, personInCharge },
       { where: { id, accountId: accountIds } },
@@ -42,7 +42,7 @@ export class ShopService {
 
   static async deleteShop(data) {
     const { accountId, id } = data;
-    const accountIds = await this.findShopPermissionsAccountIds(accountId);
+    const accountIds = await this.findAuthorizedAccountIds(accountId);
     await ShopModel.destroy({ where: { id, accountId: accountIds } });
   }
 }
