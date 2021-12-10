@@ -5,6 +5,7 @@ import './models';
 import express from 'express';
 import fs from "fs";
 import jwt from 'express-jwt';
+import {shopRouter} from "../routers";
 
 const {JWT_PUBLIC_KEY_PATH, SERVICE_API_PORT} = process.env
 
@@ -27,5 +28,7 @@ app.use(function (err, req, res, next) {
 app.get('/health', (req, res) => {
   res.send('ok');
 });
+
+app.use('/shops', shopRouter);
 
 app.listen(SERVICE_API_PORT);
