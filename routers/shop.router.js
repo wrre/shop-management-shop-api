@@ -29,3 +29,31 @@ shopRouter.post('', async (req, res) => {
     res.sendStatus(400);
   }
 });
+
+shopRouter.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const accountId = req.user.id;
+    await ShopService.updateShop({ accountId, id, shop: req.body });
+
+    res.sendStatus(201);
+  } catch (e) {
+    console.error(e);
+
+    res.sendStatus(400);
+  }
+});
+
+shopRouter.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const accountId = req.user.id;
+    await ShopService.deleteShop({ accountId, id });
+
+    res.sendStatus(202);
+  } catch (e) {
+    console.error(e);
+
+    res.sendStatus(400);
+  }
+});
