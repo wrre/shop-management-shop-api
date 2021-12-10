@@ -5,9 +5,13 @@ export const shopRouter = Router();
 
 shopRouter.get('', async (req, res) => {
   try {
-    const accountId = req.user.id;
+    const token = req.headers.authorization.split(' ')[1];
     const { limit = 20, offset = 0 } = req.query;
-    const response = await ShopService.findShops({ accountId, limit, offset });
+    const response = await ShopService.findShops({
+      token,
+      limit,
+      offset,
+    });
 
     res.json(response);
   } catch (e) {
@@ -32,9 +36,9 @@ shopRouter.post('', async (req, res) => {
 
 shopRouter.put('/:id', async (req, res) => {
   try {
+    const token = req.headers.authorization.split(' ')[1];
     const { id } = req.params;
-    const accountId = req.user.id;
-    await ShopService.updateShop({ accountId, id, shop: req.body });
+    await ShopService.updateShop({ token, id, shop: req.body });
 
     res.sendStatus(201);
   } catch (e) {
@@ -46,9 +50,9 @@ shopRouter.put('/:id', async (req, res) => {
 
 shopRouter.delete('/:id', async (req, res) => {
   try {
+    const token = req.headers.authorization.split(' ')[1];
     const { id } = req.params;
-    const accountId = req.user.id;
-    await ShopService.deleteShop({ accountId, id });
+    await ShopService.deleteShop({ token, id });
 
     res.sendStatus(202);
   } catch (e) {
